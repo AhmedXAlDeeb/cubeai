@@ -1,0 +1,198 @@
+
+CUBE AI
+Technical & Governance Framework
+A Radiology Research Platform for Automated Medical Imaging Analysis
+
+Issuing Body
+Cairo University — Faculty of Engineering
+Systems and Biomedical Engineering Department
+Version1.0 — Initial ReleaseStatusActive — Living DocumentClassificationInternal — Academic Research Use OnlyRegulatory ScopeNOT a Software as a Medical Device (SaMD)
+
+
+Table of Contents
+
+
+
+
+1. Executive Summary
+CUBE AI is an augmented medical imaging platform developed at Cairo University to automate and orchestrate the full lifecycle of radiology research studies. The platform integrates PACS connectivity, AI-driven segmentation, radiomic feature extraction, machine learning modeling, and automated scientific report generation into a single, natural-language-driven environment.
+
+The system operates in two distinct modes:
+• Standard Pipeline Mode: Interactive AI-assisted annotation, region-of-interest refinement, and custom segmentation model training using nnU-Net.
+• Agentic Research Mode: A fully autonomous multi-agent system orchestrated via Large Language Model (LLM) reasoning, comprising specialized agents for study planning, cohort management, segmentation, feature extraction, statistical modeling, and automated report generation.
+
+Regulatory Position
+CUBE AI is strictly designed for academic research contexts. It is NOT a Software as a Medical Device (SaMD), does not seek FDA 510(k) clearance or CE marking, and must not be used for clinical decision support or real-time patient care.
+This document establishes the technical specifications, governance framework, and quality management artifacts required for responsible deployment of CUBE AI in academic research settings. Compliance is addressed against:
+• ISO/IEC 42001:2023 — AI Management Systems
+• FAIR4RS Principles — Research Software Reproducibility
+• ALCOA+ Data Integrity Standards — Clinical Data Governance
+• Egyptian Personal Data Protection Law No. 151 of 2020 (PDPL) — Legal Compliance
+
+
+2. Research Certification Framework
+Industrial trust in pharmaceutical and manufacturing contexts is mediated by formal documentation artifacts — primarily the Certificate of Compliance (CoC) and Certificate of Analysis (CoA). Research AI software requires an analogous framework that prioritizes scientific integrity, AI transparency, and reproducible data governance instead of regulatory clearance.
+
+The table below maps each industrial artifact to its CUBE AI research equivalent:
+
+Industrial ArtifactCUBE AI EquivalentPurposeGoverning StandardCertificate of Compliance (CoC)AI System Card + ISO 42001 RecordAttests responsible AI management and legal data handlingISO/IEC 42001:2023, Egypt PDPLCertificate of Analysis (CoA)AI Model Card + Technical Validation ReportRecords versioned model performance metrics per releaseGMLP (FDA/Health Canada/MHRA), RSNA ATLASBatch RecordFAIR Reproducibility Artifact PackageEnsures research datasets are Findable, Accessible, Interoperable, ReusableFAIR4RS Principles [1]Test SpecificationSoftware Verification & Validation ReportProves agent routing logic correctness and system behaviorIEEE 829 [2]Bill of Materials (BOM)Software Bill of Materials (SBOM)Lists all dependencies for security audit and supply chain transparencyNTIA / CISA Guidelines [3]Stability ReportModel Drift & Revalidation LogTracks performance degradation over time across model versionsMLOps best practicesSafety Data Sheet (SDS)Bias & Limitations DisclosureDocuments failure modes, demographic blind spots, and out-of-scope usesModel Card Standard [4]
+2.1 AI System Card (CoC Equivalent)
+The AI System Card attests that the entire CUBE AI platform meets responsible design and legal compliance standards. It serves as the research equivalent of an industrial Certificate of Compliance.
+
+System-Level Disclosures
+FieldValueSystem NameCUBE AI Radiology Research PlatformDeveloperCairo University — Systems and Biomedical EngineeringIntended UsersAcademic radiology researchers; clinical radiologists in research contexts onlyDeployment ModeOn-premise (hospital workstation) — NOT cloud-hostedRegulatory ContextEgypt PDPL No. 151/2020; ISO/IEC 42001:2023Data ClassificationSensitive personal data — medical imaging under PDPL Art. 1; highest protection tierRegulatory ExclusionNOT a SaMD. No FDA 510(k) or CE mark sought or required.
+ISO/IEC 42001:2023 Compliance Requirements
+ISO/IEC 42001:2023 is the first international standard for AI Management Systems (AIMS). For CUBE AI, it provides the institutional equivalent of ISO 9001 for traditional quality management. Key obligations include:
+• AI Policy: Establish a written policy defining ethical principles and research boundaries for AI use within the platform.
+• AI Risk Register: Maintain a documented register of identified hazards, including automation bias, data drift, and segmentation errors.
+• AI Impact Assessments: Conduct formal assessments before deploying new agent modules or upgrading foundation models.
+• Accountable Personnel: Designate governance leads whose responsibilities map to the Data Protection Officer (DPO) role under the PDPL.
+• Performance Records: Maintain versioned records of AI system performance; Model Cards serve this function per release.
+
+2.2 AI Model Card (CoA Equivalent)
+An AI Model Card is the direct functional equivalent of a chemical Certificate of Analysis for machine learning systems [4]. Just as a CoA discloses purity and test results per manufacturing lot, a Model Card discloses performance characteristics per model version.
+
+Required Model Card Fields
+FieldContentModel Namee.g., CUBE-SegAgent-nnUNet-v1.2Version / Git HashSemantic version or SHA commit hashRelease DateYYYY-MM-DDIntended UseAcademic radiology research — NOT clinical diagnosis or patient triageOut-of-Scope UseClinical decision support; real-time patient triage; SaMD functionsTraining DataCU Pediatric Cohort — Egyptian institution; DICOM format; IRB approvedKnown LimitationsUnvalidated on adult, non-Egyptian, or protocol-variant datasets; sensitive to acquisition parametersBias DisclosuresTrained predominantly on pediatric Egyptian cohorts; sub-group performance on other demographics is undefined
+Performance Thresholds
+MetricTarget ThresholdValidation DatasetSegmentation Dice Similarity Coefficient (DSC)? 0.80CU Pediatric CohortLesion Detection Accuracy? 90%Hold-out test splitInteractive Tool Latency< 500 msStandard workstation (RTX 4090)3D Volume Inference Time30 – 60 secondsStandard workstation (RTX 4090)Data Hygiene Block Rate100% on failing masksUnit test suite
+Clinical Risk-Weighted Error Score (CREST)
+The CREST metric provides a clinically meaningful evaluation of model performance by weighting errors according to their clinical significance. Standard accuracy metrics treat all errors equally; CREST weights each error type by its downstream clinical impact:
+
+CREST Formula
+CREST = ( ? w? · e? ) / ( ? w? )   where w? = clinical weight of error type i, e? = error rate for that category. Lower CREST scores indicate better clinical alignment.
+CREST weights are defined collaboratively between clinical radiologists and the development team for each study type. They are documented in the corresponding Model Card and must be reviewed before each major model release.
+
+
+3. Technical Specifications
+3.1 Foundation Models
+CUBE AI leverages three state-of-the-art foundation models for medical image analysis:
+• Segment Anything Model (SAM) [5]: Meta's promptable image segmentation foundation model, adapted for interactive medical image annotation. SAM enables click- and box-prompted ROI delineation with real-time feedback.
+• Vista3D (MONAI) [6]: NVIDIA's volumetric medical imaging foundation model, providing zero-shot and fine-tuned 3D segmentation across anatomical structures.
+• nnU-Net [7]: A self-configuring deep learning framework for biomedical image segmentation that automatically adapts preprocessing pipelines, network architectures, and training procedures to dataset characteristics. Used for custom cohort-specific model training.
+
+3.2 Infrastructure Requirements
+ComponentSpecificationGPUNVIDIA RTX 4090 (24 GB VRAM) — required for full-resolution 3D inference without downsamplingVRAM Floor? 24 GB VRAM; lower-VRAM cards require downsampling which may reduce segmentation fidelityStorageSSD with sufficient capacity for DICOM datasets; NVMe recommended for large cohortsNetworkSecure, institutional-only connection to PACS; no external internet egress for patient dataDeploymentOn-premise only — cloud deployment prohibited under PDPL Art. 17 (cross-border data transfer)
+3.3 Model Context Protocol (MCP) for PACS Integration
+The Model Context Protocol (MCP) [8] serves as CUBE AI's architectural safety and audit mechanism — the equivalent of a laboratory chain-of-custody protocol. Every interaction between autonomous agents and clinical infrastructure is mediated, logged, and constrained by MCP.
+
+MCP Governance Functions
+FunctionDescriptionContext IsolationEach agent operates within a defined data scope; no lateral access between agent contexts is permitted.Tool-Call AuditingEvery PACS query, segmentation call, and report generation event is logged with timestamp, agent identity, and input/output hash.Authorization EnforcementAgents cannot execute tools outside their declared capability manifest; unauthorized calls are rejected and logged.Replay & ReproducibilityThe complete tool-call log enables deterministic replay of any research session for audit and scientific verification.
+Research Lifecycle Integration — Agent Orchestration Flow
+Orchestration Pipeline
+Researcher Natural Language Query ? Planner Agent (reads authorized study context via MCP)    ??? Population Agent    ? PACS retrieval (MCP-authorized scope only)    ??? Segmentation Agent  ? SAM / nnU-Net inference (all calls logged)    ??? Features Agent      ? PyRadiomics / IBSI-compliant extraction (logged)    ??? Modeling Agent      ? scikit-learn / MONAI DL pipelines (logged)    ??? Reporting Agent     ? LaTeX engine (output hash logged + researcher sign-off)
+3.4 Agentic AI Architecture Design Patterns
+CUBE AI's agentic research mode implements the following design patterns from the agentic AI paradigm [9]:
+• Goal-Oriented Autonomy: Agents receive high-level research goals expressed in natural language and autonomously decompose them into actionable sub-tasks.
+• ReAct Pattern: Agents alternate between reasoning (planning next steps based on partial results) and acting (calling tools) to iteratively solve research problems.
+• Hierarchical Orchestration: A Planner agent oversees all specialized agents, coordinates dependencies between tasks, and delegates execution.
+• Human-in-the-Loop (HITL): High-risk decisions — including segmentation mask acceptance, cohort inclusion/exclusion, and final report export — require explicit researcher approval.
+• Glass-Box Observability: All reasoning steps, tool calls, and intermediate outputs are exposed in a real-time monitoring interface. Researchers can inspect, pause, modify, or redirect any stage.
+
+3.5 Software Bill of Materials (SBOM)
+CUBE AI maintains a full SBOM in SPDX and CycloneDX formats [10, 11], listing all components, licenses, and pinned versions for security audit and supply chain transparency:
+
+ComponentCategoryLicenseVersion PinnedMONAIMedical imaging AI frameworkApache 2.0YesnnU-NetSelf-configuring segmentationApache 2.0YesPyRadiomicsRadiomic feature extractionBSD 3-ClauseYesAutoGen / AG2Multi-agent orchestrationMITYesOrthancDICOM PACS serverGPLv3YesCornerstone3DMedical imaging viewerMITYesscikit-learnClassical ML modelingBSD 3-ClauseYesPyLaTeXAutomated report generationMITYesFastAPIBackend API layerMITYes
+
+4. Data Integrity Framework
+4.1 ALCOA+ Compliance via MCP
+The Model Context Protocol creates a clinical audit trail that satisfies all ALCOA+ data integrity principles mandated by the FDA for regulated research [12]:
+
+PrincipleMCP Implementation in CUBE AIAttributableEvery agent action is linked to a specific user identity, session ID, and agent identifier in the audit log.LegibleLogs are stored in human-readable and machine-parseable JSON format; no binary or opaque log formats.ContemporaneousTimestamps are generated at the moment of action execution; retroactive logging is architecturally prevented.OriginalPrimary records are preserved in immutable log files; silent overwrites are blocked by the MCP layer.AccurateTool-call results are recorded as executed — including errors — not as intended or retrospectively edited.+ CompleteFull end-to-end audit trails are maintained for all research sessions, including intermediate agent states.+ ConsistentStandardized JSON logging schema is enforced uniformly across all agents and pipeline stages.+ EnduringLogs are retained per the institutional data retention policy and linked to the corresponding study record.+ AvailableLogs are accessible to authorized personnel for audit, reproducibility verification, and regulatory inspection.
+4.2 FAIR Principles for Research Outputs
+CUBE AI implements FAIR4RS guidelines [1, 13] to ensure all research outputs are reusable and verifiable:
+
+PillarCUBE AI ImplementationFindableEvery study is assigned a persistent identifier (DOI or UUID); the PICO query, cohort definition, and pipeline configuration are logged with a content hash.AccessibleResearch datasets are stored with standardized access protocols; all PACS retrieval logs and access permissions are retained per study.InteroperableDICOM standard for imaging data; RDF/JSON-LD for metadata; IBSI-compliant radiomic feature nomenclature [14] for cross-study compatibility.ReusableModel training configurations, preprocessing parameters, augmentation strategies, and random seeds are fully logged to enable deterministic reproduction of any experiment.
+
+5. Research Ethics and Legal Compliance
+5.1 Egyptian PDPL Compliance
+CUBE AI processes sensitive personal data in the form of medical imaging and must comply with Egypt's Personal Data Protection Law No. 151 of 2020 [15]. The following matrix maps statutory obligations to platform implementations:
+
+RequirementPDPL ProvisionCUBE AI ImplementationLawful basis for processingArt. 4Explicit written consent per study participant; parental consent form for pediatric cases.Sensitive data classificationArt. 1Medical imaging explicitly classified as sensitive data; highest PDPL protection tier applied.Data minimizationArt. 5Only DICOM fields required for the specified research hypothesis are extracted; excess metadata is discarded.Cross-border transfer restrictionArt. 17On-premise deployment is mandatory. No patient data may be uploaded to international cloud services under any circumstances.Data Protection Officer (DPO)Exec. Regs.The university must designate a DPO; the role and accountabilities are documented in the Record of Processing Activities (ROPA).Record of Processing Activities (ROPA)Exec. Regs.Maintained per study; includes purpose, legal basis, data categories, recipients, and retention period.Data subject rightsArt. 12–16Participants retain the right to access, correct, and withdraw consent at any time without penalty.Breach notificationArt. 20A documented Incident Response Procedure (IRP) defines escalation, notification timelines, and NTRA reporting obligations.
+5.2 Purpose Limitation and Scope Enforcement
+Under PDPL Art. 5, personal data must be collected and used only for specified, explicit, and legitimate purposes. CUBE AI enforces purpose limitation through three complementary mechanisms:
+• Study-Specific Data Scopes: Each research study has a defined data access boundary, declared at study inception and enforced by the MCP layer. Agents cannot retrieve data outside the declared scope.
+• PICO-Driven Retrieval: All PACS queries are constrained to the Population, Intervention, Comparison, and Outcome parameters formally specified in the study protocol. Ad-hoc queries are not permitted.
+• Audit Logging with Purpose Justification: Every data access event is logged with the associated study ID, PICO hash, and the agent that initiated the request.
+
+
+6. Data Quality Assurance
+6.1 Automated Quality Gates
+Analogous to incoming quality control (IQC) in pharmaceutical manufacturing, CUBE AI's Data Hygiene Agent enforces data quality before any computational pipeline proceeds. A study cannot advance past a failed gate without explicit researcher override and documented justification:
+
+Quality GateTrigger ConditionSystem ActionMask Coverage CheckSegmentation mask covers < 5% or > 95% of volumePipeline blocked; researcher prompted to review and re-annotate.Inter-Rater ConsistencyCohen's ? < 0.6 between automated and reference masksWarning issued; manual verification required before continuation.DICOM CompletenessMissing required DICOM metadata fieldsRetrieval retried; study flagged as incomplete if unresolvable.Class Imbalance DetectionFewer than 10 positive cases in cohortResearcher warned; study design review strongly recommended.Radiomic StabilityICC < 0.75 for test-retest radiomic featuresUnstable features excluded from downstream modeling; logged in study record.
+6.2 Automation Bias Mitigation
+CUBE AI enforces an Active Confirmation protocol to prevent automation bias. Researchers must explicitly interact with and verify segmentation masks before they are accepted and propagated downstream. This deliberate friction mechanism ensures that no automated output becomes part of the study record without conscious human review.
+
+Active Confirmation Requirement
+No segmentation mask, feature extraction result, or model prediction may be saved to the study record or passed to a downstream agent without explicit researcher sign-off via the CUBE AI interface. This requirement cannot be disabled.
+
+7. Software Verification and Validation
+7.1 Verification vs. Validation
+• Verification: 'Did we build the system right?' — Unit and integration tests proving each agent calls the correct tools with correct parameters and handles errors gracefully.
+• Validation: 'Did we build the right system?' — Clinical research studies confirming CUBE AI outputs align with expert radiologist findings and published clinical standards.
+
+7.2 Test Categories
+Test TypeCoverageStandardUnit TestsIndividual agent tool-call logic; error handling; edge casesIEEE 829 [2]Integration TestsAgent-to-agent communication via MCP; pipeline end-to-end integrityIEEE 829 [2]Regression TestsConsistency of outputs across software updates and model version bumpsSQA best practicesPerformance BenchmarksLatency, throughput, and GPU utilization under realistic research loadISO/IEC 25010 [16]Clinical ValidationConcordance of CUBE AI outputs with expert radiologist ground truth annotationsSTARD 2015 [17]Adversarial TestsBehavior on out-of-distribution inputs; robustness to malformed DICOM; hallucination detectionMITRE ATLAS [18]
+
+8. Risk Register
+The following register identifies primary hazards specific to CUBE AI's agentic architecture and multi-modal AI pipeline, with proposed mitigations under ISO 14971 [19]:
+
+HazardPotential HarmSeverityLikelihoodMitigation StrategySegmentation errorIncorrect ROI leads to erroneous features and invalid study conclusionsHighMediumHITL review; uncertainty visualization; anatomy-specific validation cohort.Flawed PICO formulationInvalid research hypothesis; wasted institutional resourcesMediumMediumMandatory radiologist review gate; comparison against published PICO templates.Model driftDeclining accuracy on new patient populations over timeHighMediumAutomated drift monitoring dashboard; Post-Deployment Monitoring Plan (PDMP) with defined revalidation thresholds.Biased training dataSystematic underperformance on under-represented demographicsHighMediumSub-group performance analysis; bias audit per Model Card release; continuous monitoring dashboard.PACS security breachUnauthorized access to patient imaging dataCriticalLowDICOM TLS; role-based access control (RBAC); SBOM supply chain audit; penetration testing; documented Incident Response Plan.Agent hallucinationIncorrect model selection, test choice, or statistical interpretation leading to invalid resultsHighLowGlass-box observability; mandatory researcher sign-off before any result is accepted into the study record.Report errorsIncorrect findings published in scientific literatureHighLowAutomated sanity checks on reported statistics; mandatory human review of complete draft before export.DICOM incompatibilityData parsing errors; corrupted or missing radiomic featuresMediumMediumMulti-vendor DICOM conformity testing; Data Hygiene Agent completeness gate at pipeline entry.
+
+9. Certification Posture Summary
+CUBE AI does not seek FDA 510(k) clearance or CE marking, as it is an academic research tool and not a clinical medical device. Its certification posture is instead composed of research-grade governance artifacts that collectively constitute a complete quality management system appropriate for AI operating in a clinical research setting:
+
+ArtifactIndustrial EquivalentStatusISO 42001 AIMS Compliance RecordCertificate of Compliance (CoC)Required — to be completed before production deploymentAI Model Cards (per versioned model)Certificate of Analysis (CoA)Required — issued with each model releaseFAIR + ALCOA+ Data Artifact PackageBatch RecordRequired — generated per studySoftware Bill of Materials (SBOM)Ingredient / BOM ListIn progress — SPDX + CycloneDX formatsVerification & Validation ReportTest SpecificationIn progress — IEEE 829 compliantEgypt PDPL 151/2020 Legal Compliance DocsRegulatory FilingRequired — ROPA and consent templates needed
+
+10. Conclusion
+This document establishes the technical and governance framework for CUBE AI, providing research-equivalent artifacts for each class of industrial quality certificate. The framework demonstrates that rigorous AI governance is achievable in academic research settings without the overhead of full regulatory medical device clearance.
+
+The platform's glass-box observability architecture, human-in-the-loop design philosophy, and comprehensive MCP-based audit trail together satisfy both regulatory expectations under the Egyptian PDPL and scientific reproducibility requirements under FAIR4RS and ALCOA+. Adherence to ISO/IEC 42001:2023 provides a principled, internationally recognized management system for responsible AI deployment.
+
+This document is a living artifact. It must be reviewed and updated with each model release, system modification, or change in applicable regulations. The next scheduled review is triggered by: (1) any versioned model release, (2) any change to the Egyptian PDPL executive regulations, or (3) annual review, whichever occurs first.
+
+
+11. References
+The following references are numbered in order of first citation in this document. References have been reviewed, verified for accuracy, and categorized for traceability.
+
+Standards and Regulatory Frameworks
+[1] Research Data Alliance FAIR for Research Software Working Group. FAIR for Research Software (FAIR4RS) Principles. 2022. https://www.rd-alliance.org/groups/fair-for-research-software-fair4rs-wg
+[2] Institute of Electrical and Electronics Engineers. IEEE 829-2008 — Standard for Software and System Test Documentation. IEEE, 2008. https://standards.ieee.org/ieee/829/
+[3] National Telecommunications and Information Administration (NTIA). Minimum Elements for a Software Bill of Materials (SBOM). 2021. https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom
+[4] M. Mitchell et al. 'Model Cards for Model Reporting.' In Proceedings of the Conference on Fairness, Accountability, and Transparency (FAT*), pp. 220–229, 2019. DOI: 10.1145/3287560.3287596
+
+Foundation Models and Medical Imaging AI
+[5] A. Kirillov et al. 'Segment Anything.' arXiv preprint arXiv:2304.02643, 2023. https://arxiv.org/abs/2304.02643
+[6] MONAI Consortium. Vista3D: NVIDIA 3D Medical Imaging Foundation Model. 2024. https://monai.io/
+[7] F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, K. H. Maier-Hein. 'nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation.' Nature Methods, 18(2): 203–211, 2021. DOI: 10.1038/s41592-020-01008-z
+
+Architecture and Agentic AI
+[8] Anthropic. Model Context Protocol Specification. 2025. https://modelcontextprotocol.io/
+[9] IBM. What is Agentic AI? IBM Think, 2024. https://www.ibm.com/think/topics/agentic-ai
+[10] Linux Foundation. SPDX Specification. 2024. https://spdx.github.io/spdx-spec/
+[11] OWASP Foundation. CycloneDX Specification. 2024. https://cyclonedx.org/specification/overview/
+
+Data Integrity and Governance
+[12] U.S. Food and Drug Administration. Data Integrity and Compliance With Drug CGMP: Questions and Answers — Guidance for Industry. FDA, 2018. https://www.fda.gov/media/119394/download
+[13] M. D. Wilkinson et al. 'The FAIR Guiding Principles for scientific data management and stewardship.' Scientific Data, 3: 160018, 2016. DOI: 10.1038/sdata.2016.18
+[14] Image Biomarker Standardisation Initiative (IBSI). IBSI Reference Manual. 2024. https://theibsi.github.io/
+
+Legal and Regulatory Compliance
+[15] Arab Republic of Egypt. Personal Data Protection Law No. 151 of 2020. Ministry of Communications and Information Technology. https://mcit.gov.eg/
+
+Software Quality and Validation Standards
+[16] International Organization for Standardization. ISO/IEC 25010:2011 — Systems and Software Quality Requirements and Evaluation (SQuaRE). ISO, 2011. https://www.iso.org/standard/35733.html
+[17] P. M. Bossuyt et al. 'STARD 2015: An Updated List of Essential Items for Reporting Diagnostic Accuracy Studies.' BMJ, 351: h5527, 2015. DOI: 10.1136/bmj.h5527
+[18] MITRE Corporation. MITRE ATLAS — Adversarial Threat Landscape for Artificial-Intelligence Systems. 2024. https://atlas.mitre.org/
+[19] International Organization for Standardization. ISO 14971:2019 — Medical devices — Application of risk management to medical devices. ISO, 2019. https://www.iso.org/standard/72704.html
+
+Additional Referenced Standards (In-Document Use)
+[20] International Organization for Standardization. ISO/IEC 42001:2023 — Information technology — Artificial intelligence — Management system. ISO, 2023. https://www.iso.org/standard/81230.html
+[21] FDA, Health Canada, MHRA. Good Machine Learning Practice for Medical Device Development: Guiding Principles. October 2021. https://www.fda.gov/medical-devices/software-medical-device-samd/good-machine-learning-practice-medical-device-development-guiding-principles
+[22] Radiological Society of North America. RSNA AI Transparency (ATLAS) Framework. 2024. https://www.rsna.org/practice-tools/ai-resources-and-publications
+[23] T. Gebru et al. 'Datasheets for Datasets.' Communications of the ACM, 64(12): 86–92, 2021. DOI: 10.1145/3458723
+CUBE AI  |  Technical & Governance Framework	Cairo University — Confidential
+
+v1.0  |  NOT a SaMD — Research Use Only	Page 2 of 3
+
