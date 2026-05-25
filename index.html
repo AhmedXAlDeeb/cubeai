@@ -1594,6 +1594,66 @@
         </div>
       </section>
 
+      <section class="section-shell agentic" id="agentic">
+        <div class="container">
+          <div class="section-label reveal" data-delay="0">Agentic Research</div>
+          <h2 class="reveal" data-delay="100">Agentic orchestration for reproducible experiments</h2>
+          <p class="muted reveal" data-delay="150">CUBE AI coordinates the full research loop as an agentic system: from PACS ingestion to annotation, self-configuring training, validation, and model publication — all tracked and auditable.</p>
+
+          <div class="section-grid reveal" data-delay="200" style="margin-top:22px; gap:18px;">
+            <article class="panel">
+              <h3>Autonomous Data Preparation</h3>
+              <p class="muted">Automatically fetch studies from Orthanc via DICOMweb, extract metadata, apply inclusion/exclusion filters, and prepare training-ready datasets with provenance metadata stored in PostgreSQL.</p>
+            </article>
+            <article class="panel">
+              <h3>Assisted Annotation</h3>
+              <p class="muted">Invoke foundation models (SAM, Vista3D, nnInteractive) to propose labels, accept human corrections, and cache embeddings to speed up iterative labelling workflows.</p>
+            </article>
+            <article class="panel">
+              <h3>Self-Configuring Training</h3>
+              <p class="muted">The system fingerprints the dataset and configures nnU-Net/MONAI experiments (preprocessing, augmentation, network topology) automatically, then schedules and monitors training runs.</p>
+            </article>
+            <article class="panel">
+              <h3>Validation & Reproducibility</h3>
+              <p class="muted">Experimental splits, metrics (Dice, IoU), and logs are recorded for reproducible benchmarking; trained models are versioned in the model bank for multi-site evaluation.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell demo" id="demo">
+        <div class="container">
+          <div class="section-label reveal" data-delay="0">Demo</div>
+          <h2 class="reveal" data-delay="100">See it on your data</h2>
+          <p class="muted reveal" data-delay="150">Request a guided demo and we'll walk your team through PACS integration, assisted annotation, and an end-to-end training run using your de-identified studies.</p>
+          <div style="margin-top:18px;">
+            <a class="button button-ghost trackable reveal" href="#waitlist" data-delay="200" data-track="demo_request">Request a Demo</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell team" id="team">
+        <div class="container">
+          <div class="section-label reveal" data-delay="0">Team & Collaboration</div>
+          <h2 class="reveal" data-delay="100">Small team, clinical focus</h2>
+          <p class="muted reveal" data-delay="150">We are a focused group of engineers and clinicians building tools to make clinical AI reproducible and practical. We welcome collaborators, contributors, and research partners.</p>
+          <div class="trust-grid" style="margin-top:20px;">
+            <article class="trust-card reveal" data-delay="200">
+              <h3>Engineering</h3>
+              <p>Backend, training orchestration, and model lifecycle engineering (MONAI, nnU-Net, deployment).</p>
+            </article>
+            <article class="trust-card reveal" data-delay="300">
+              <h3>Clinical Research</h3>
+              <p>Radiology workflows, annotation design, and clinical validation to keep the product grounded in real needs.</p>
+            </article>
+            <article class="trust-card reveal" data-delay="400">
+              <h3>Open Collaboration</h3>
+              <p>Contribute on GitHub or open an issue to discuss integration, evaluation, or partnership opportunities.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="section-shell waitlist" id="waitlist">
         <div class="container waitlist-inner">
           <div class="eyebrow reveal" data-delay="0"><span class="dot" aria-hidden="true"></span>Early Bird Access</div>
@@ -1734,6 +1794,38 @@
                 <div class="faq-answer-inner">Yes. Early bird members will have a direct line to the product team. Your feedback will shape what we build next.</div>
               </div>
             </div>
+            <div class="faq-item reveal" data-delay="500">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-a7" id="faq-q7">
+                <span>How does the agentic research system work?</span><span aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" id="faq-a7" role="region" aria-labelledby="faq-q7">
+                <div class="faq-answer-inner">CUBE AI orchestrates tasks: fetch studies from PACS, propose labels using foundation models, build dataset fingerprints, run self-configured nnU-Net/MONAI experiments, validate results, and publish versioned models to the model bank.</div>
+              </div>
+            </div>
+            <div class="faq-item reveal" data-delay="550">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-a8" id="faq-q8">
+                <span>Which foundation models are integrated?</span><span aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" id="faq-a8" role="region" aria-labelledby="faq-q8">
+                <div class="faq-answer-inner">CUBE AI integrates SAM, Vista3D, and nnInteractive for prompt-based and interactive annotation. These are optimized to operate on medical volumes without unnecessary DICOM conversions.</div>
+              </div>
+            </div>
+            <div class="faq-item reveal" data-delay="600">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-a9" id="faq-q9">
+                <span>Can CUBE AI run on-premises for research?</span><span aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" id="faq-a9" role="region" aria-labelledby="faq-q9">
+                <div class="faq-answer-inner">Yes. The platform is designed to work with local Orthanc deployments and PostgreSQL metadata stores, enabling on-premises research workflows that keep data within institutional boundaries.</div>
+              </div>
+            </div>
+            <div class="faq-item reveal" data-delay="650">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-a10" id="faq-q10">
+                <span>How are models validated and tracked?</span><span aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" id="faq-a10" role="region" aria-labelledby="faq-q10">
+                <div class="faq-answer-inner">Training runs include standardized splits and metrics (e.g., Dice), and all runs, configurations, and logs are recorded for reproducibility and auditability. Trained models are versioned in the model bank for comparison and deployment.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1753,6 +1845,10 @@
             <a href="#about">About</a>
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
+            <a href="#research">Research</a>
+            <a href="#agentic">Agentic</a>
+            <a href="#demo">Demo</a>
+            <a href="#team">Team</a>
             <a href="#waitlist">Early Bird</a>
           </div>
 
