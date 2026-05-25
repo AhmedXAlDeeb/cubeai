@@ -7,7 +7,7 @@ The platform prepares the dataset for the self-configuring model by transferring
 
 
     
-# PACS Overview
+## PACS Overview
 
 <details>
 <summary><strong>📦 Definition: What is a DICOM PACS Server?</strong></summary>    
